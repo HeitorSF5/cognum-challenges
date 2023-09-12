@@ -13,6 +13,11 @@ const createEmployee = async (employee) => {
   } catch(err) { return false }
 };
 
-const readEmployee
+const readEmployees = async () => {
+  try {
+    const [employees] = await connection.execute('SELECT * FROM Employee')
+    return employees
+  } catch(err) { return false }
+};
 
-module.exports = { createEmployee }
+module.exports = { createEmployee, readEmployees };
