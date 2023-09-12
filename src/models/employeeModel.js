@@ -33,4 +33,16 @@ const updateEmployee = async (req, res) => {
   } catch(err) { return res.status(404).json({message: 'Employee not found!'}) }
 }
 
-module.exports = { createEmployee, readEmployees, updateEmployee };
+const deleteEmployee = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await connection.execute(
+      'DELETE FROM Employee WHERE id=?',
+      [id]
+    );
+    return res.status(200).json({message: "Employee deleted successfully!"});
+  } catch(err) { return res.status(404).json({message: "Could not find Employee to delete!"}) }
+}
+// NOTE: It will return a successful message when the id does not match any entry in the table!
+
+module.exports = { createEmployee, readEmployees, updateEmployee, deleteEmployee };
