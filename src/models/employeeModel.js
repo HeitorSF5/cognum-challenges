@@ -64,9 +64,9 @@ const deleteEmployee = async (req, res) => {
 const createManyEmployees = async (employeeList) => {
   try {
     const values = employeeList.map((employee) => [employee.name, employee.role]);
-    // Formats the Array to be an Array of Arrays and not an Array of Objects
+    // Formats it to be an Array of Arrays and not an Array of Objects for SQL syntax
     const placeholders = employeeList.map(() => '(?, ?)').join(', ');
-    // Formats it so there is a "," string in between each entry just like SQL requires
+    // Converts the mapped Array into string for SQL syntax
 
     const BULK_INSERT_QUERY = `INSERT INTO Employee (name, role) VALUES ${placeholders}`
     await connection.execute(BULK_INSERT_QUERY, [].concat(...values))

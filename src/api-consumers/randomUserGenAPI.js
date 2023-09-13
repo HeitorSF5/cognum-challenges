@@ -13,11 +13,15 @@ const getRandomUsers = async (_req, res) => {
   const employeeList = response.data.results.map(({name}) => {
     return { name: name.first + " " + name.last, role: DEFAULT_ROLE }
   });
+  
   try {
     const createSuccess = await createManyEmployees(employeeList);
     if (createSuccess) return res.status(201).json(employeeList)
     else return res.status(400).json({message: "Query could not be executed!"})
-  } catch(err) { return res.status(400).json(err)}
+  } catch(err) { 
+    console.log(err)
+    return res.status(400).json({message: 'Could not generate new random employees!'})
+  }
 };
 
 module.exports = getRandomUsers;
