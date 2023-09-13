@@ -5,7 +5,7 @@ As seguintes tecnologias foram utilizadas para o desenvolvimento:
 
 ## Configuração:
 🧩 Dependencias:
- - Usando seu CLI de preferência simplesmente rode o comando `npm i`
+ - Usando seu CLI de preferência simplesmente rode o comando `npm i` dentro da root do projeto
 
 🌐 Environment / Ambiente:
  - Incluido no projeto está um arquivo chamado `.env.EXAMPLE`. Faça as seguintes modificações neste mesmo arquivo:
