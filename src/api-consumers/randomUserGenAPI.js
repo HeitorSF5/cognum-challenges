@@ -4,8 +4,6 @@ const DEFAULT_ROLE = 'Developer'
 
 // DESAFIO 3 - POPULATE with External API
 
-// Note: The challenge implied that I should reuse the CRUD functions previous made, but I'd rather make a new "CreateMany" to not establish 10 separate connection instances with the DB in quick succession, but rather just 1.
-
 // Obs: O desafio deixa implicito o reuso das funções de CRUD criadas anteriormente, mas eu prefiro criar uma nova "CreateMany" para não estabelecer 10 instancias de conexões com o Banco de Dados, mas sim 1 unica conexão.
 
 const getRandomUsers = async (_req, res) => {

@@ -2,9 +2,7 @@ const connection = require('./connection');
 
 // DESAFIO 2 - Employee CRUD
 
-// Note: Normally I'd make a full MSC/MVC architecture for handling all HTTP requests with their respective layers, but for simplicity's sake everything will happen in the Model layer.
-
-// Obs: Normalmente eu crio e utilizo uma arquitetura MSC/MVC para respostas em HTTP com tudo em sua respectiva camada, mas por simplicidade eu vou deixar tudo na camada de Model.
+// Obs: Normalmente eu crio e utilizo uma arquitetura MSC/MVC para respostas em HTTP com tudo em sua respectiva camada, mas por simplicidade eu optei por fazer tudo na camada de Model.
 
 const createEmployee = async (req, res) => {
   try {
@@ -45,28 +43,27 @@ const updateEmployee = async (req, res) => {
   }
 }
 
-// Note²: It will return a successful message when the id does not match any entry in the table!
-// Obs²: Retorna um falso positivo mesmo quando não exista o id na tabela!
 const deleteEmployee = async (req, res) => {
   try {
     const { id } = req.params;
-    await connection.execute(
+    const [result] = await connection.execute(
       'DELETE FROM Employee WHERE id=?',
       [id]
     );
+    if (result.affectedRows === 0) return res.status(404).json({message:"Could not find employee!"})
     return res.status(200).json({message: "Employee deleted successfully!"});
   } catch(err) {
     console.log(err);
-    return res.status(404).json({message: "Could not delete employee!"});
+    return res.status(400).json({message: "Could not delete employee!"});
   }
 }
 
 const createManyEmployees = async (employeeList) => {
   try {
     const values = employeeList.map((employee) => [employee.name, employee.role]);
-    // Formats it to be an Array of Arrays and not an Array of Objects for SQL syntax
+    // Formata para um Array de Arrays - Sintaxe de SQL
     const placeholders = employeeList.map(() => '(?, ?)').join(', ');
-    // Converts the mapped Array into string for SQL syntax
+    // Converte o Array mapeado para string com virgulas intermitentes - Sintaxe de SQL
 
     const BULK_INSERT_QUERY = `INSERT INTO Employee (name, role) VALUES ${placeholders}`
     await connection.execute(BULK_INSERT_QUERY, [].concat(...values))
