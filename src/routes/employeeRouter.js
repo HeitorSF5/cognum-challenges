@@ -6,7 +6,7 @@ const employeeRouter = Router();
 employeeRouter
   .post('/employee', createEmployee)
   .get('/employee', readEmployees)
-  .put('/employee', updateEmployee)
-  .delete('/employee', deleteEmployee)
+  .put('/employee/:id', updateEmployee)
+  .delete('/employee/:id', deleteEmployee)
 
 module.exports = employeeRouter;

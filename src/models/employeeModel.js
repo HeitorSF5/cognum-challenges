@@ -30,11 +30,10 @@ const readEmployees = async (_req, res) => {
   }
 };
 
-// Note²: Usually the "id" is passed through the req.headers
-// Obs²: Normalmente o "id" é pego pelo req.headers
 const updateEmployee = async (req, res) => {
   try {
-    const { name, role, id } = req.body;
+    const { name, role } = req.body;
+    const { id } = req.params;
     await connection.execute(
       'UPDATE Employee SET name=?, role=? WHERE id=?',
       [name, role, id]
@@ -46,11 +45,11 @@ const updateEmployee = async (req, res) => {
   }
 }
 
-// Note³: It will return a successful message when the id does not match any entry in the table!
-// Obs³: Retorna um falso positivo mesmo quando não exista o id na tabela!
+// Note²: It will return a successful message when the id does not match any entry in the table!
+// Obs²: Retorna um falso positivo mesmo quando não exista o id na tabela!
 const deleteEmployee = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     await connection.execute(
       'DELETE FROM Employee WHERE id=?',
       [id]
