@@ -4,6 +4,8 @@ const connection = require('./connection');
 
 // Note: Normally I'd make a full MSC/MVC architecture for handling all HTTP requests with their respective layers, but for simplicity's sake everything will happen in the Model layer.
 
+// Obs: Normalmente eu crio e utilizo uma arquitetura MSC/MVC para respostas em HTTP com tudo em sua respectiva camada, mas por simplicidade eu vou deixar tudo na camada de Model.
+
 const createEmployee = async (req, res) => {
   try {
     const { name, role } = req.body;
@@ -12,16 +14,24 @@ const createEmployee = async (req, res) => {
       [name, role]
     );
     return res.status(201).json({message: 'New employee created successfully!'})
-  } catch(err) { return res.status(400).json({message: 'Something went wrong!!!'}) }
+  } catch(err) {
+    console.log(err)
+    return res.status(400).json({message:"Could not create a new employee!"})
+  }
 };
 
 const readEmployees = async (_req, res) => {
   try {
     const [employees] = await connection.execute('SELECT * FROM Employee')
     return res.status(200).json(employees)
-  } catch(err) { return res.status(500).json({message: "Server error!"}) }
+  } catch(err) {
+    console.log(err)
+    return res.status(500).json({message:"Could not get employees!"})
+  }
 };
 
+// Note²: Usually the "id" is passed through the req.headers
+// Obs²: Normalmente o "id" é pego pelo req.headers
 const updateEmployee = async (req, res) => {
   try {
     const { name, role, id } = req.body;
@@ -30,9 +40,14 @@ const updateEmployee = async (req, res) => {
       [name, role, id]
     )
     return res.status(200).json({message: 'Employee updated successfully!'})
-  } catch(err) { return res.status(404).json({message: 'Employee not found!'}) }
+  } catch(err) {
+    console.log(err);
+    return res.status(404).json({message: 'Could not update employee!'});
+  }
 }
 
+// Note³: It will return a successful message when the id does not match any entry in the table!
+// Obs³: Retorna um falso positivo mesmo quando não exista o id na tabela!
 const deleteEmployee = async (req, res) => {
   try {
     const { id } = req.body;
@@ -41,8 +56,26 @@ const deleteEmployee = async (req, res) => {
       [id]
     );
     return res.status(200).json({message: "Employee deleted successfully!"});
-  } catch(err) { return res.status(404).json({message: "Could not find Employee to delete!"}) }
+  } catch(err) {
+    console.log(err);
+    return res.status(404).json({message: "Could not delete employee!"});
+  }
 }
-// NOTE: It will return a successful message when the id does not match any entry in the table!
 
-module.exports = { createEmployee, readEmployees, updateEmployee, deleteEmployee };
+const createManyEmployees = async (employeeList) => {
+  try {
+    const values = employeeList.map((employee) => [employee.name, employee.role]);
+    // Formats the Array to be an Array of Arrays and not an Array of Objects
+    const placeholders = employeeList.map(() => '(?, ?)').join(', ');
+    // Formats it so there is a "," string in between each entry just like SQL requires
+
+    const BULK_INSERT_QUERY = `INSERT INTO Employee (name, role) VALUES ${placeholders}`
+    await connection.execute(BULK_INSERT_QUERY, [].concat(...values))
+    return true;
+  } catch(err) {
+    console.log(err);
+    return false ;
+  }
+};
+
+module.exports = { createEmployee, readEmployees, updateEmployee, deleteEmployee, createManyEmployees };
