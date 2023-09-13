@@ -17,8 +17,9 @@ As seguintes tecnologias foram utilizadas para o desenvolvimento:
 
 🚩 Scripts:
  - Para rodar o servidor utilize o comando: `npm start`
+---
 
-Testando as Rotas:
+🔃 Testando as Rotas:
   - Hello
     - `GET` `http://localhost:3000/hello`
   - Create Employee
