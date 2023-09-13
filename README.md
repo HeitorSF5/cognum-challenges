@@ -10,7 +10,7 @@ As seguintes tecnologias foram utilizadas para o desenvolvimento:
 🌐 Environment / Ambiente:
  - Incluido no projeto está um arquivo chamado `.env.EXAMPLE`. Faça as seguintes modificações neste mesmo arquivo:
    - Renomeie-o para somente `.env`
-   - Insira seus dados e credenciais para os correspondentes na sua maquina como por exemplo: `MYSQL_HOST=localhost` 
+   - Insira seus dados e credenciais para os correspondentes na sua maquina, como por exemplo: `MYSQL_HOST=localhost` 
      - Essa aplicação roda na porta `3000`, então não conecte ao seu Banco de Dados em `DB_PORT=` com a mesma porta!
 
 🚩 Scripts:
